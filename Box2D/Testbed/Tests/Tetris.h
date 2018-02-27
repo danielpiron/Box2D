@@ -58,14 +58,16 @@ public:
 		SpawnPiece();
 	}
 
-	void SpawnPiece()
+	void SpawnPiece(int piece_id=0)
 	{
 		const float32 BLOCKSIZE = 0.5f;
-		const b2Vec2 piece[4] = {
-			{ -2.0, 0.0 },
-			{ -1.0, 0.0 },
-			{ 0.0, 0.0 },
-			{ 1.0, 0.0 },
+		const b2Vec2 piece[][4] = {
+			{ // I
+				{ -2.0, 0.0 },
+				{ -1.0, 0.0 },
+				{ 0.0, 0.0 },
+				{ 1.0, 0.0 },
+			}
 		};
 
 		b2FixtureDef fd;
@@ -79,7 +81,7 @@ public:
 		b2Body* body = m_world->CreateBody(&bd);
 		for (int i = 0; i < 4; i++) {
 			b2PolygonShape shape;
-			shape.SetAsBox(BLOCKSIZE, BLOCKSIZE, piece[i], 0);
+			shape.SetAsBox(BLOCKSIZE, BLOCKSIZE, piece[piece_id][i], 0);
 			fd.shape = &shape;
 			body->CreateFixture(&fd);
 		}
