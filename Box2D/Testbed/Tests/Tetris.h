@@ -55,31 +55,33 @@ public:
 				position.y -= 2.0f * a;
 			}
 		}
+		SpawnPiece();
+	}
 
-		{
-			const float32 BLOCKSIZE = 0.5f;
-			const b2Vec2 piece[4] = {
-				{-2.0, 0.0},
-				{-1.0, 0.0},
-				{ 0.0, 0.0},
-				{ 1.0, 0.0},
-			};
+	void SpawnPiece()
+	{
+		const float32 BLOCKSIZE = 0.5f;
+		const b2Vec2 piece[4] = {
+			{ -2.0, 0.0 },
+		{ -1.0, 0.0 },
+		{ 0.0, 0.0 },
+		{ 1.0, 0.0 },
+		};
 
-			b2FixtureDef fd;
-			fd.density = 5.0f;
-			fd.restitution = 0.25f;
-			fd.friction = 0.5f;
+		b2FixtureDef fd;
+		fd.density = 5.0f;
+		fd.restitution = 0.25f;
+		fd.friction = 0.5f;
 
-			b2BodyDef bd;
-			bd.type = b2_dynamicBody;
-			bd.position = b2Vec2(0, 40.0);
-			b2Body* body = m_world->CreateBody(&bd);
-			for (int i = 0; i < 4; i++) {
-				b2PolygonShape shape;
-				shape.SetAsBox(BLOCKSIZE, BLOCKSIZE, piece[i], 0);
-				fd.shape = &shape;
-				body->CreateFixture(&fd);
-			}
+		b2BodyDef bd;
+		bd.type = b2_dynamicBody;
+		bd.position = b2Vec2(0, 40.0);
+		b2Body* body = m_world->CreateBody(&bd);
+		for (int i = 0; i < 4; i++) {
+			b2PolygonShape shape;
+			shape.SetAsBox(BLOCKSIZE, BLOCKSIZE, piece[i], 0);
+			fd.shape = &shape;
+			body->CreateFixture(&fd);
 		}
 	}
 
