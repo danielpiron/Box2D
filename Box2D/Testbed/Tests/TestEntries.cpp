@@ -63,6 +63,7 @@
 #include "SliderCrank.h"
 #include "SphereStack.h"
 #include "TheoJansen.h"
+#include "Tetris.h"
 #include "Tiles.h"
 #include "TimeOfImpact.h"
 #include "Tumbler.h"
@@ -73,6 +74,7 @@
 
 TestEntry g_testEntries[] =
 {
+	{"Tetris", Tetris::Create },
 	{"Character Collision", CharacterCollision::Create},
 	{"Tiles", Tiles::Create},
 	{"Heavy on Light", HeavyOnLight::Create},
