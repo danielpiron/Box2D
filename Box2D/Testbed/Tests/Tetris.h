@@ -63,9 +63,9 @@ public:
 		const float32 BLOCKSIZE = 0.5f;
 		const b2Vec2 piece[4] = {
 			{ -2.0, 0.0 },
-		{ -1.0, 0.0 },
-		{ 0.0, 0.0 },
-		{ 1.0, 0.0 },
+			{ -1.0, 0.0 },
+			{ 0.0, 0.0 },
+			{ 1.0, 0.0 },
 		};
 
 		b2FixtureDef fd;
@@ -82,6 +82,16 @@ public:
 			shape.SetAsBox(BLOCKSIZE, BLOCKSIZE, piece[i], 0);
 			fd.shape = &shape;
 			body->CreateFixture(&fd);
+		}
+	}
+
+	void Keyboard(int key)
+	{
+		switch (key)
+		{
+		case GLFW_KEY_S:
+			SpawnPiece();
+			break;
 		}
 	}
 
