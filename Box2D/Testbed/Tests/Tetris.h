@@ -19,6 +19,15 @@
 #ifndef TETRIS_H
 #define TETRIS_H
 
+const int CYAN = 0x00FFFF;
+const int BLUE = 0x0000FF;
+const int ORANGE = 0xFFA500;
+const int YELLOW = 0xFFFF00;
+const int GREEN = 0x00FF00;
+const int MAGENTA = 0xFF00FF;
+const int RED = 0xFF0000;
+
+
 /// This stress tests the dynamic tree broad-phase. This also shows that tile
 /// based collision is _not_ smooth due to Box2D not knowing about adjacency.
 class Tetris : public Test
@@ -68,18 +77,6 @@ public:
 				{ 0.0, 0.0 },
 				{ 1.0, 0.0 },
 			},
-			{ // O
-				{ -0.5, 0.5 },
-				{ 0.5, 0.5 },
-				{ 0.5, -0.5 },
-				{ -0.5, -0.5 },
-			},
-			{ // T
-				{ 0.0, -1.0 },
-				{ -1.0, 0.0 },
-				{ 0.0, 0.0 },
-				{ 1.0, 0.0 },
-			},
 			{ // J
 				{ 1.0, -1.0 },
 				{ -1.0, 0.0 },
@@ -92,10 +89,22 @@ public:
 				{ 0.0, 0.0 },
 				{ 1.0, 0.0 },
 			},
+			{ // O
+				{ -0.5, 0.5 },
+				{ 0.5, 0.5 },
+				{ 0.5, -0.5 },
+				{ -0.5, -0.5 },
+			},
 			{ // S
 				{ -1.0, -1.0 },
 				{ 0.0, 0.0 },
 				{ 0.0, -1.0 },
+				{ 1.0, 0.0 },
+			},
+			{ // T
+				{ 0.0, -1.0 },
+				{ -1.0, 0.0 },
+				{ 0.0, 0.0 },
 				{ 1.0, 0.0 },
 			},
 			{ // Z
@@ -106,6 +115,10 @@ public:
 			},
 		};
 
+		const int* colorref[] = {
+			&CYAN, &BLUE, &ORANGE, &YELLOW, &GREEN, &MAGENTA, &RED
+		};
+
 		b2FixtureDef fd;
 		fd.density = 5.0f;
 		fd.restitution = 0.25f;
@@ -114,6 +127,7 @@ public:
 		b2BodyDef bd;
 		bd.type = b2_dynamicBody;
 		bd.position = b2Vec2(0, 40.0);
+		bd.userData = (void*)colorref[piece_id];
 		b2Body* body = m_world->CreateBody(&bd);
 		for (int i = 0; i < 4; i++) {
 			b2PolygonShape shape;

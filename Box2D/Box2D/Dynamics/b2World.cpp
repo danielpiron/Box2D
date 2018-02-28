@@ -1159,10 +1159,19 @@ void b2World::DrawDebugData()
 
 	uint32 flags = g_debugDraw->GetFlags();
 
+	auto ConvertColor = [] (int rawcolor, float f=1.0) -> b2Color
+	{
+		float r = ((rawcolor >> 16) & 0xFF) / 255.0f;
+		float g = ((rawcolor >> 8) & 0xFF) / 255.0f;
+		float b = (rawcolor & 0xFF) / 255.0f;
+		return b2Color(r * f, g * f, b * f);
+	};
+
 	if (flags & b2Draw::e_shapeBit)
 	{
 		for (b2Body* b = m_bodyList; b; b = b->GetNext())
 		{
+			int* pColor = (int*)b->GetUserData();
 			const b2Transform& xf = b->GetTransform();
 			for (b2Fixture* f = b->GetFixtureList(); f; f = f->GetNext())
 			{
@@ -1176,15 +1185,28 @@ void b2World::DrawDebugData()
 				}
 				else if (b->GetType() == b2_kinematicBody)
 				{
+
 					DrawShape(f, xf, b2Color(0.5f, 0.5f, 0.9f));
+					
 				}
 				else if (b->IsAwake() == false)
 				{
-					DrawShape(f, xf, b2Color(0.6f, 0.6f, 0.6f));
+					if (pColor) {
+						DrawShape(f, xf, ConvertColor(*pColor, 0.75f));
+					}
+					else {
+						DrawShape(f, xf, b2Color(0.6f, 0.6f, 0.6f));
+
+					}
 				}
 				else
 				{
-					DrawShape(f, xf, b2Color(0.9f, 0.7f, 0.7f));
+					if (pColor) {
+						DrawShape(f, xf, ConvertColor(*pColor));
+					}
+					else {
+						DrawShape(f, xf, b2Color(0.9f, 0.7f, 0.7f));
+					}
 				}
 			}
 		}
