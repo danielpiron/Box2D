@@ -127,6 +127,7 @@ public:
 		b2BodyDef bd;
 		bd.type = b2_dynamicBody;
 		bd.position = b2Vec2(0, 40.0);
+		bd.gravityScale = 0;
 		bd.userData = (void*)colorref[piece_id];
 		b2Body* body = m_world->CreateBody(&bd);
 		for (int i = 0; i < 4; i++) {
@@ -135,6 +136,8 @@ public:
 			fd.shape = &shape;
 			body->CreateFixture(&fd);
 		}
+		body->SetLinearVelocity({ 0, -4.0f });
+		m_falling_piece = body;
 	}
 
 	void Keyboard(int key)
@@ -143,6 +146,18 @@ public:
 		{
 		case GLFW_KEY_S:
 			SpawnPiece(rand() % 7);
+			break;
+		case GLFW_KEY_W:
+			m_falling_piece->SetTransform(m_falling_piece->GetPosition(),
+										  m_falling_piece->GetAngle() + 3.1415926535897932f / 2);
+			break;
+		case GLFW_KEY_A:
+			m_falling_piece->SetTransform(m_falling_piece->GetPosition() - b2Vec2(1.0, 0.0),
+				                          m_falling_piece->GetAngle());
+			break;
+		case GLFW_KEY_D:
+			m_falling_piece->SetTransform(m_falling_piece->GetPosition() + b2Vec2(1.0, 0.0),
+				                          m_falling_piece->GetAngle());
 			break;
 		}
 	}
@@ -175,6 +190,7 @@ public:
 	}
 
 	int32 m_fixtureCount;
+	b2Body* m_falling_piece;
 };
 
 #endif
