@@ -46,7 +46,7 @@ public:
 			bd.position.y = -a;
 			b2Body* ground = m_world->CreateBody(&bd);
 
-			int32 N = 200;
+			int32 N = 8;
 			int32 M = 10;
 			b2Vec2 position;
 			position.y = 0.0f;
@@ -144,9 +144,6 @@ public:
 	{
 		switch (key)
 		{
-		case GLFW_KEY_S:
-			SpawnPiece(rand() % 7);
-			break;
 		case GLFW_KEY_W:
 			m_falling_piece->SetTransform(m_falling_piece->GetPosition(),
 										  m_falling_piece->GetAngle() + 3.1415926535897932f / 2);
@@ -159,29 +156,21 @@ public:
 			m_falling_piece->SetTransform(m_falling_piece->GetPosition() + b2Vec2(1.0, 0.0),
 				                          m_falling_piece->GetAngle());
 			break;
+		case GLFW_KEY_S:
+			m_falling_piece->SetLinearVelocity(m_falling_piece->GetLinearVelocity() + b2Vec2(0.0f, -4.0f));
 		}
 	}
 
 	void Step(Settings* settings)
 	{
-		const b2ContactManager& cm = m_world->GetContactManager();
-		int32 height = cm.m_broadPhase.GetTreeHeight();
-		int32 leafCount = cm.m_broadPhase.GetProxyCount();
-		int32 minimumNodeCount = 2 * leafCount - 1;
-		float32 minimumHeight = ceilf(logf(float32(minimumNodeCount)) / logf(2.0f));
-		g_debugDraw.DrawString(5, m_textLine, "dynamic tree height = %d, min = %d", height, int32(minimumHeight));
-		m_textLine += DRAW_STRING_NEW_LINE;
 
 		Test::Step(settings);
 
-		m_textLine += DRAW_STRING_NEW_LINE;
+		if (m_falling_piece->GetContactList()) {
+			m_falling_piece->SetGravityScale(1.0f);
+			SpawnPiece(rand() % 7);
+		}
 
-		//b2DynamicTree* tree = &m_world->m_contactManager.m_broadPhase.m_tree;
-
-		//if (m_stepCount == 400)
-		//{
-		//	tree->RebuildBottomUp();
-		//}
 	}
 
 	static Test* Create()
